@@ -27,8 +27,20 @@ describe("resizeImage", () => {
 // test endpoint
 const url = "/upload?filename=palmtunnel&width=340&height=300";
 describe("endpoint", () => {
-  it("Test endpoint", async () => {
+  it("Test endpoint by POST METHOD", async () => {
     const result = await request.post(url);
+    expect(result.status).toBe(200);
+    expect(result.body).toEqual(
+      jasmine.objectContaining({
+        message: "Your image successfully resized"
+      })
+    );
+  });
+});
+
+describe("endpoint", () => {
+  it("Test endpoint by GET METHOD", async () => {
+    const result = await request.get(url);
     expect(result.status).toBe(200);
     expect(result.body).toEqual(
       jasmine.objectContaining({

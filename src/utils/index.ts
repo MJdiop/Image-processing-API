@@ -22,7 +22,7 @@ export const readFiles = async (
   try {
     const files = await fs.readFile(fileToRead, "utf8").then((data) => {
       response.writeHead(200, { "Content-Type": "text/html" });
-      const newData = data.replace("{{data}}", `<img src="images/${filename}_thumb.jpg" alt="alt" />`);
+      const newData = data.replace("{{data}}", `<img src="/images/${filename}_thumb.jpg" alt="alt" />`);
       response.write(newData);
       response.end();
       return newData;

@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
-    "prod": "npx tsc && node prod/index.js",
+    "start:prod": "npx tsc && node prod/index.js",
     "build": "npx tsc",
     "lint": "eslint --ext prod/**/**/*.js src/**/**/*.ts",
-    "format": "prettier --config .prettierrc  prod/**/**/*.js src/**/**/*.ts --write",
+    "format": "prettier --config .prettierrc  prod src --write",
     "test": "npx tsc && jasmine"
   },
   "keywords": [

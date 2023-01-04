@@ -1,7 +1,7 @@
 import * as express from "express";
 import fileRouter from "./fileRouter";
 import path = require("path");
-import { readFiles } from "./utils";
+import { readFiles, resizeImage } from "./utils";
 
 const PORT = 3000;
 
@@ -13,14 +13,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", fileRouter);
 
 app.use("/", express.static(__dirname + "/public"));
-app.use("/image", (req, res) => {
-  // eslint-disable-next-line no-unsafe-optional-chaining
-  const { filename } = req?.query;
-  if (filename) {
-    const fileToRead = path.join(__dirname + "/public/index.html");
-    readFiles(res, fileToRead, filename);
-  } else {
-    console.log("Error Input file is missing");
+app.use("/image", async (req, res) => {
+  try {
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const { filename, width, height } = req?.query;
+    const file = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
+    const outPut = path.join(__dirname.replace("fileRouter", "") + `/public/images/${filename}_thumb.jpg`);
+    const requetWidth = Number(width) || 300;
+    const requetHidth = Number(height) || 300;
+
+    await resizeImage(file, requetWidth, requetHidth, outPut);
+
+    if (filename) {
+      const fileToRead = path.join(__dirname + "/public/index.html");
+      readFiles(res, fileToRead, filename);
+    } else {
+      console.log("Error Input file is missing");
+    }
+  } catch (error) {
+    throw new Error(error + "your image could not be processed - | - or does not exist ");
   }
 });
 
