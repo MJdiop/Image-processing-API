@@ -38,32 +38,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest = require("supertest");
 var path = require("path");
+var fsp = require("fs/promises");
 var utils_1 = require("../utils");
 var request = supertest("http://localhost:3000");
-describe("resizeImage", function () {
-    it("should return a resized image", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+var url = "/upload?filename=palmtunnel&width=340&height=300";
+describe("Test endpoint response", function () {
+    it("test server is work", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, utils_1.resizeImage)(path.join(__dirname + "/assets/" + "palmtunnel" + ".jpg"), 340, 300, path.join(__dirname + "/public/images/palmtunnel_thumb.jpg"))];
+                case 0: return [4 /*yield*/, request.get(url)];
                 case 1:
-                    result = _a.sent();
-                    expect(result).toEqual(jasmine.objectContaining({
-                        format: "jpeg",
-                        width: 340,
-                        height: 300,
-                        channels: 3,
-                        premultiplied: false,
-                        size: 23210
-                    }));
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
                     return [2 /*return*/];
             }
         });
     }); });
-});
-// test endpoint
-var url = "/upload?filename=palmtunnel&width=340&height=300";
-describe("endpoint", function () {
     it("Test endpoint by POST METHOD", function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
@@ -79,18 +70,80 @@ describe("endpoint", function () {
             }
         });
     }); });
+    it("Test api with request parameter endpoint  result 200", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get("/upload/?filename=fjord&width=900&height=900")];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it("Test api without request parameter endpoint  result 400", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get("/upload")];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(400);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it("Test api with some request parameter  endpoint result 400", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get("/upload/?filename=fjord&height=900")];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(400);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
-describe("endpoint", function () {
-    it("Test endpoint by GET METHOD", function () { return __awaiter(void 0, void 0, void 0, function () {
+describe("Test processing", function () {
+    it("Test Image processed was successfully resized", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var imagePath, outPut, width, height, photo;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    imagePath = path.join(__dirname.replace("fileRouter", "") + "/assets/" + "fjord" + ".jpg");
+                    outPut = path.join(__dirname.replace("fileRouter", "") + "/public/images/fjord_thumb.jpg");
+                    width = 500;
+                    height = 500;
+                    return [4 /*yield*/, (0, utils_1.resizeImage)(imagePath, width, height, outPut)];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, fsp.readFile(outPut)];
+                case 2:
+                    photo = (_a.sent()).buffer;
+                    expect(photo).toBeInstanceOf(ArrayBuffer);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});
+describe("resizeImage function", function () {
+    it("should return a resized image", function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get(url)];
+                case 0: return [4 /*yield*/, (0, utils_1.resizeImage)(path.join(__dirname + "/assets/" + "palmtunnel" + ".jpg"), 340, 300, path.join(__dirname + "/public/images/palmtunnel_thumb.jpg"))];
                 case 1:
                     result = _a.sent();
-                    expect(result.status).toBe(200);
-                    expect(result.body).toEqual(jasmine.objectContaining({
-                        message: "Your image successfully resized"
+                    expect(result).toEqual(jasmine.objectContaining({
+                        format: "jpeg",
+                        width: 340,
+                        height: 300,
+                        channels: 3,
+                        premultiplied: false,
+                        size: 37356
                     }));
                     return [2 /*return*/];
             }

@@ -38,21 +38,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var path = require("path");
+var fs = require("fs");
+var fsp = require("fs/promises");
 var utils_1 = require("../utils");
 var router = (0, express_1.Router)();
 router.get("/upload", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, filename, width, height, file, outPut, requetWidth, requetHidth, result, error_1;
+    var _a, filename, width, height, requetWidth_1, requetHidth_1, imagePath_1, outPut_1;
+    return __generator(this, function (_b) {
+        _a = req === null || req === void 0 ? void 0 : req.query, filename = _a.filename, width = _a.width, height = _a.height;
+        if (!filename || !width || !height) {
+            res.status(400).send("Please, enter your filename,width,height");
+        }
+        else {
+            requetWidth_1 = Number(width) || 300;
+            requetHidth_1 = Number(height) || 300;
+            if (!requetWidth_1 || !requetHidth_1) {
+                res.status(500).send("Width and height must be a number");
+            }
+            else {
+                imagePath_1 = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
+                outPut_1 = path.join(__dirname.replace("fileRouter", "") + "/public/images/".concat(filename, "_thumb.jpg"));
+                fs.stat(outPut_1, function (error) {
+                    if (error == null) {
+                        fsp
+                            .readFile(outPut_1)
+                            .then(function (Data) {
+                            res.status(200).contentType("jpg").send(Data);
+                        })
+                            .catch(function (err) {
+                            res.status(500).send(err);
+                        });
+                    }
+                    else if (error.code === "ENOENT") {
+                        fs.stat(imagePath_1, function (er) {
+                            if (er == null) {
+                                try {
+                                    (0, utils_1.resizeImage)(imagePath_1, requetWidth_1, requetHidth_1, outPut_1).then(function () {
+                                        fsp
+                                            .readFile(outPut_1)
+                                            .then(function (Data) {
+                                            res.status(200).contentType("jpg").send(Data);
+                                        })
+                                            .catch(function () {
+                                            res.status(500).send("Error occurred processing the image");
+                                        });
+                                    });
+                                }
+                                catch (err) {
+                                    res.status(500).send("Error occurred processing the image" + err);
+                                }
+                            }
+                            else if (error.code === "ENOENT") {
+                                res.send("File not Exists");
+                            }
+                        });
+                    }
+                    else {
+                        console.log("Some other error: ", error.code);
+                    }
+                });
+            }
+        }
+        return [2 /*return*/];
+    });
+}); });
+router.post("/upload", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, filename, width, height, imagePath, outPut, requetWidth, requetHidth, result, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 4, , 5]);
                 _a = req === null || req === void 0 ? void 0 : req.query, filename = _a.filename, width = _a.width, height = _a.height;
                 if (!filename) return [3 /*break*/, 2];
-                file = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
+                imagePath = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
                 outPut = path.join(__dirname.replace("fileRouter", "") + "/public/images/".concat(filename, "_thumb.jpg"));
                 requetWidth = Number(width) || 300;
                 requetHidth = Number(height) || 300;
-                return [4 /*yield*/, (0, utils_1.resizeImage)(file, requetWidth, requetHidth, outPut)];
+                return [4 /*yield*/, (0, utils_1.resizeImage)(imagePath, requetWidth, requetHidth, outPut)];
             case 1:
                 result = _b.sent();
                 if (result) {
@@ -66,36 +128,6 @@ router.get("/upload", function (req, res) { return __awaiter(void 0, void 0, voi
             case 4:
                 error_1 = _b.sent();
                 throw new Error(error_1 + "your image could not be processed - | - or does not exist ");
-            case 5: return [2 /*return*/];
-        }
-    });
-}); });
-router.post("/upload", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, filename, width, height, file, outPut, requetWidth, requetHidth, result, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 4, , 5]);
-                _a = req === null || req === void 0 ? void 0 : req.query, filename = _a.filename, width = _a.width, height = _a.height;
-                if (!filename) return [3 /*break*/, 2];
-                file = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
-                outPut = path.join(__dirname.replace("fileRouter", "") + "/public/images/".concat(filename, "_thumb.jpg"));
-                requetWidth = Number(width) || 300;
-                requetHidth = Number(height) || 300;
-                return [4 /*yield*/, (0, utils_1.resizeImage)(file, requetWidth, requetHidth, outPut)];
-            case 1:
-                result = _b.sent();
-                if (result) {
-                    res.json({ message: "Your image successfully resized" });
-                }
-                return [3 /*break*/, 3];
-            case 2:
-                console.log("Error Input file is missing");
-                _b.label = 3;
-            case 3: return [3 /*break*/, 5];
-            case 4:
-                error_2 = _b.sent();
-                throw new Error(error_2 + "your image could not be processed - | - or does not exist ");
             case 5: return [2 /*return*/];
         }
     });

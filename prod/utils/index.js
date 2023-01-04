@@ -36,19 +36,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readFiles = exports.resizeImage = void 0;
+exports.resizeImage = void 0;
 var sharp = require("sharp");
-var fs_1 = require("fs");
 var resizeImage = function (file, width, height, outPut) { return __awaiter(void 0, void 0, void 0, function () {
     var result, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, sharp(file)
-                        .resize(width, height)
-                        .jpeg({ quality: width <= 400 ? 50 : 80 })
-                        .toFile(outPut)];
+                return [4 /*yield*/, sharp(file).resize(width, height).jpeg({ quality: 80 }).toFile(outPut)];
             case 1:
                 result = _a.sent();
                 return [2 /*return*/, result];
@@ -60,27 +56,3 @@ var resizeImage = function (file, width, height, outPut) { return __awaiter(void
     });
 }); };
 exports.resizeImage = resizeImage;
-var readFiles = function (response, fileToRead, filename) { return __awaiter(void 0, void 0, void 0, function () {
-    var files, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, fs_1.promises.readFile(fileToRead, "utf8").then(function (data) {
-                        response.writeHead(200, { "Content-Type": "text/html" });
-                        var newData = data.replace("{{data}}", "<img src=\"/images/".concat(filename, "_thumb.jpg\" alt=\"alt\" />"));
-                        response.write(newData);
-                        response.end();
-                        return newData;
-                    })];
-            case 1:
-                files = _a.sent();
-                return [2 /*return*/, files];
-            case 2:
-                error_2 = _a.sent();
-                throw new Error("error " + error_2);
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.readFiles = readFiles;
