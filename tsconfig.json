@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "lib": ["ES2018", "DOM"],
+    "outDir": "./prod",
+    "baseUrl": "./src",
+    "strict": true,
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts", "src/utils/index.ts", "src/index.ts"],
+  "exclude": ["node_modules", "./prod", "spec", "tests"]
+}

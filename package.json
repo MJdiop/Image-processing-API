@@ -1,0 +1,44 @@
+{
+  "name": "images-processing-api",
+  "version": "1.0.0",
+  "description": "Image Processing API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "prod": "npx tsc && node prod/index.js",
+    "build": "npx tsc",
+    "lint": "eslint --ext prod/**/**/*.js src/**/**/*.ts",
+    "format": "prettier --config .prettierrc  prod/**/**/*.js src/**/**/*.ts --write",
+    "test": "npx tsc && jasmine"
+  },
+  "keywords": [
+    "Image",
+    "Processing",
+    "API"
+  ],
+  "author": "MJdiop",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jasmine-spec-reporter": "^7.0.0",
+    "sharp": "^0.31.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.15",
+    "@types/jasmine": "^4.3.1",
+    "@types/node": "^18.11.18",
+    "@types/sharp": "^0.31.1",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jasmine": "^4.5.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.1",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}

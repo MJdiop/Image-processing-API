@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": ["./packages/*/tsconfig.json"] },
+  "plugins": [
+      "@typescript-eslint"
+  ],
+  "rules": {
+    "semi": "off",
+    "@typescript-eslint/semi": "error"
+  },
+  "ignorePatterns": ["src/*/**/*.test.ts", "src/frontend/generated/*"]
+}
