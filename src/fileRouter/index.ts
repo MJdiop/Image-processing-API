@@ -3,10 +3,11 @@ import * as path from "path";
 import * as fs from "fs";
 import * as fsp from "fs/promises";
 import { resizeImage } from "../utils";
+import { cacheMiddleware } from "../middleware/cacheMiddleware";
 
 const router = Router();
 
-router.get("/upload", async (req: Request, res: Response) => {
+router.get("/upload", cacheMiddleware, async (req: Request, res: Response) => {
   // eslint-disable-next-line no-unsafe-optional-chaining
   const { filename, width, height } = req?.query;
 

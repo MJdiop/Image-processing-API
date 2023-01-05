@@ -9,7 +9,7 @@
     "build": "npx tsc",
     "lint": "eslint --ext prod/**/**/*.js src/**/**/*.ts",
     "format": "prettier --config .prettierrc  prod src --write",
-    "test": "npx tsc && jasmine"
+    "test": "concurrently --kill-others  \"node prod/index.js \" \"npx tsc && jasmine\""
   },
   "keywords": [
     "Image",
@@ -21,6 +21,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "jasmine-spec-reporter": "^7.0.0",
+    "node-cache": "^5.1.2",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
+    "concurrently": "^7.6.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",

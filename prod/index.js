@@ -11,4 +11,3 @@ app.use("/", fileRouter_1.default);
 app.listen(PORT, function () {
     console.log("Server started on port " + PORT);
 });
-exports.default = app;

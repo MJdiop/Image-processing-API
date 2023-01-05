@@ -41,8 +41,9 @@ var path = require("path");
 var fs = require("fs");
 var fsp = require("fs/promises");
 var utils_1 = require("../utils");
+var cacheMiddleware_1 = require("../middleware/cacheMiddleware");
 var router = (0, express_1.Router)();
-router.get("/upload", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get("/upload", cacheMiddleware_1.cacheMiddleware, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, filename, width, height, requetWidth_1, requetHidth_1, imagePath_1, outPut_1;
     return __generator(this, function (_b) {
         _a = req === null || req === void 0 ? void 0 : req.query, filename = _a.filename, width = _a.width, height = _a.height;
