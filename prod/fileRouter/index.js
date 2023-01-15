@@ -41,9 +41,8 @@ var path = require("path");
 var fs = require("fs");
 var fsp = require("fs/promises");
 var utils_1 = require("../utils");
-var cacheMiddleware_1 = require("../middleware/cacheMiddleware");
 var router = (0, express_1.Router)();
-router.get("/upload", cacheMiddleware_1.cacheMiddleware, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get("/upload", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, filename, width, height, requetWidth_1, requetHidth_1, imagePath_1, outPut_1;
     return __generator(this, function (_b) {
         _a = req === null || req === void 0 ? void 0 : req.query, filename = _a.filename, width = _a.width, height = _a.height;
@@ -60,7 +59,7 @@ router.get("/upload", cacheMiddleware_1.cacheMiddleware, function (req, res) { r
                 imagePath_1 = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
                 outPut_1 = path.join(__dirname.replace("fileRouter", "") + "/public/images/".concat(filename, "_thumb.jpg"));
                 fs.stat(outPut_1, function (error) {
-                    if (error == null) {
+                    if (error == null && fs.existsSync(outPut_1)) {
                         fsp
                             .readFile(outPut_1)
                             .then(function (Data) {
@@ -70,7 +69,7 @@ router.get("/upload", cacheMiddleware_1.cacheMiddleware, function (req, res) { r
                             res.status(500).send(err);
                         });
                     }
-                    else if (error.code === "ENOENT") {
+                    else if ((error === null || error === void 0 ? void 0 : error.code) === "ENOENT") {
                         fs.stat(imagePath_1, function (er) {
                             if (er == null) {
                                 try {
@@ -89,13 +88,13 @@ router.get("/upload", cacheMiddleware_1.cacheMiddleware, function (req, res) { r
                                     res.status(500).send("Error occurred processing the image" + err);
                                 }
                             }
-                            else if (error.code === "ENOENT") {
+                            else if ((error === null || error === void 0 ? void 0 : error.code) === "ENOENT") {
                                 res.send("File not Exists");
                             }
                         });
                     }
                     else {
-                        console.log("Some other error: ", error.code);
+                        console.log("Some other error: ", error === null || error === void 0 ? void 0 : error.code);
                     }
                 });
             }
