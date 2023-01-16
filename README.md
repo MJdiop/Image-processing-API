@@ -48,5 +48,5 @@ $ npm run test
 ```bash
 #(with Query Params) #filenem #width #height
 
-# http://localhost:3000/image/?filename=fjord&width=340&height=300
+# http://localhost:3000/upload/?filename=fjord&width=340&height=300
 ```
