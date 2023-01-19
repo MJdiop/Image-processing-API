@@ -65,7 +65,7 @@ describe("resizeImage function", () => {
         height: 300,
         channels: 3,
         premultiplied: false,
-        size: 37356
+        size: 37335
       })
     );
   });

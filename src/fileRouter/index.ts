@@ -13,14 +13,14 @@ router.get("/upload", async (req: Request, res: Response) => {
   if (!filename || !width || !height) {
     res.status(400).send("Please, enter your filename,width,height");
   } else {
-    const requetWidth: number = Number(width) || 300;
-    const requetHidth: number = Number(height) || 300;
+    const requetWidth = Number(width);
+    const requetHidth = Number(height);
 
-    if (!requetWidth || !requetHidth) {
+    if (isNaN(requetWidth) || isNaN(requetHidth)) {
       res.status(500).send("Width and height must be a number");
     } else {
       const imagePath = path.join(__dirname.replace("fileRouter", "") + "/assets/" + filename + ".jpg");
-      const outPut = path.join(__dirname.replace("fileRouter", "") + `/public/images/${filename}_thumb.jpg`);
+      const outPut = path.join(__dirname.replace("fileRouter", "") + `/public/images/${filename}_${requetWidth}X${requetHidth}.jpg`);
       fs.stat(outPut, (error) => {
         if (error == null && fs.existsSync(outPut)) {
           fsp
